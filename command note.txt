@@ -1,0 +1,194 @@
+get
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0xF1 
+set
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0xF2 0x01
+
+cat /sys/class/net/bond0/bonding/primary
+
+cat /proc/net/bonding/bond0
+
+
+i2c-test -b 1 --scan
+
+i2c-test -b 1 -s 0x29  -rc 1 -d 0x04
+
+i2c-test -b 1 -s 0x29  -rc 1 -d 0x04
+i2c-test -b 1 -s 0x29 -w -d 0x04
+i2c-test -b 1 -s 0x29 -r -rc 1
+
+i2c-test -b 0 -s 0x2D -w -d 0x4E 0x01
+
+i2c-test -b 0 -s 0x2D  -rc 1 -d 0x50
+
+i2c-test -b 0 -s 0x2D -w -d 0x50 
+i2c-test -b 0 -s 0x2D -r -rc 1
+
+//用來查詢目前的platform的字串，該字串存在EEPROM，可以用 0x3A 0xAA 設定字串(參考oem command list)
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0xAB
+
+SET_CHASSIS_ID 1U2E-C252
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0xAA  0x31 0x55 0x32 0x45 0x2D 0x43 0x32 0x35 0x32
+
+
+
+不檢查 model name 燒錄
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0xA8 0x00
+
+回Defualt
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x32 0x66 
+
+ipmitool -H 127.0.0.1 -U admin -P admin lan  print 1
+
+
+ipmitool -H 127.0.0.1 -U admin -P amdin raw 0x0A 0x44 0x38 0x00 0x02 0x79 0xA4 0x7D 0x60 0x20 0x00 0x04 0x01 0x50 0x01 0x57 0xFF 0x54
+ipmitool -H 127.0.0.1 -U admin -P amdin sel elist
+
+command prompt run as administrator please,it can runs normally
+
+
+Base Address of GPIO = 0x1E78 0000
+Register Address of GPIO = (Base Address of GPIO) + Offset
+
+regmemapp -r -a 0x1E7801E4 -l 0x04 -f 0x10
+
+devmem 0x1e6e2000 32 0x1688a8a8 (Unlock SCU)
+devmem 0x1E7801E4 32 0x00000600
+devmem 0x1e6e207c 32 0x00200000
+
+devmem 0x1E7801E4 32 0x00000100
+devmem 0x1e6e2000 32 0x0 (Unlock SCU)
+
+devmem 0x1e6e2090
+
+gpiotool 207 --get-data-
+gpiotool 207 --set-data-low
+
+
+gpiotool 202 --set-dir-output
+devmem 0x1E7801E4
+0x00000400
+
+gpiotool 202 --set-dir-input
+devmem 0x1E7801E4
+0x00000000
+
+get MAC addr
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0xA1 0x02
+
+
+
+
+ipmitool  -H 127.0.0.1 -U admin -P admin lan print 1
+
+ipmitool -H 127.0.0.1 -U admin -P admin  raw 0x0c 0x01 0x01 0xc2 0x00
+
+set MAC addrc OEM
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0x0A0 0x00 0xD0 0x50 0x99 0xF6 0x41 0xFD
+
+set MAC addr
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x0c 0x01 0x01 0xc2 0x00   (set MAC 一定要)
+
+ipmitool -H 127.0.0.1 -U admin -P admin  raw 0x0c 0x01 0x01 0x05 0xD0 0x27 0x88 0xA4 0xE4 0x37
+
+ipmitool -H 127.0.0.1 -U admin -P admin  lan set 0x01 macaddr 8c:88:a5:15:aa:bb
+ipmitool -H 127.0.0.1 -U admin -P admin  lan set 0x01 macaddr D0:50:99:F5:7F:EA
+
+ipmitool  -H 127.0.0.1 -U admin -P admin lan set 1 defgw macaddr D0:50:99:FA:23:FA
+                                             NetFn CMD  Ch   sel   MAC Addr
+ipmitool -H 127.0.0.1 -U admin -P admin  raw 0x0c  0x01 0x01 0x0D 0xD0 0x50 0x99 0xFA 0x23 0xFA
+Get MAC addr
+ipmitool -H 127.0.0.1 -U admin -P admin  raw 0x0c 0x02 0x01 0x05 0x00 0x00
+
+ipmitool -H 127.0.0.1 -U admin -P admin  raw 0x3A 0x52 0x60 0x10
+
+i2c
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0x52 0x01 0x5A 0x1
+i2c-test -b 1 -s 0x52  -r  -rc 1
+
+ipmitool -H 127.0.0.1 -U admin -P admin lan set 1 ipsrc static
+ipmitool -H 127.0.0.1 -U admin -P admin lan set 1 ipaddr 192.168.36.221 
+ipmitool -H 127.0.0.1 -U admin -P admin lan set 1 netmask 255.255.255.0
+ipmitool -H 127.0.0.1 -U admin -P admin lan set 1 arp respond on       
+ipmitool -H 127.0.0.1 -U admin -P admin lan set 1 arp generate on
+ipmitool -H 127.0.0.1 -U admin -P admin lan set 1 arp interval 27
+ipmitool -H 127.0.0.1 -U admin -P admin lan set 1 defgw ipaddr 192.168.36.224
+ipmitool  -H 127.0.0.1 -U admin -P admin lan set 1 defgw macaddr D0:50:99:FA:23:FA
+
+Get Default ip  addr
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x0C 0x02 0x01 0x0C 0x00 0x00
+Get Default Gateway MAC  addr
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x0C 0x02 0x01 0x0D 0x00 0x00
+
+//----------------------------------------------
+FAN LED  
+
+i2c-test -b 1 -s 0x1C -w -d 0x1 0x01
+
+0xFE
+0xFD
+0xFB
+0xF7
+0xEF
+0xDF
+0xBF
+0x7F
+
+///// Yafuflash update BIOS over lan  //////
+./Yafuflash -nw -ip 192.168.36.194 -fb  -u admin -p 123456789 -d 2 -full E3C252D4U-2T_1.21.ROM
+
+
+
+above command is used to add  the rules to block both ipv4 and ipv6 Traffic
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x32 0x076 0x09 0x00 0x03
+
+
+//mos------------------------------------
+
+0x00 >>1 0x00
+0x18 >>1 0x0C
+0x50 >>1 0x28
+0x6E >>1 0x37
+0xC0 >>1 0x60
+
+i2c-test -b  11-s 0x1C -w -d 0x1 0x01
+i2c-test -b 11 -s 0x28 -w -d 0x00
+
+
+
+
+寫入FRU檔
+
+ipmitool -H 127.0.0.1 -U admin -P 123456789 -I lanplus fru write 0 fru_id_0_0.bin
+
+
+
+
+FAN IC
+i2c-test -b 7 -s 0x02 -m 1 -rc 1  -d 0xA0
+
+//-------------PCA9545A-----------------------
+
+
+i2c-test -b 2 -s 0x70 -m 1 -w -d 0x04
+i2c-test -b 2 -s 0x70 -m 1 -r -rc 1
+i2c-test -b 2 -s 0x4F -m 1 -rc 1 -d 0x00
+
+
+OCP
+i2c-test -b 2 -s 0x4c -m 1 -r -rc 1
+
+
+wd_tm 0
+wd_tm 1 0
+wd_tm 2 0
+wd_tm 3 0
+
+/etc/init.d/ipmistack stop //IPMI 暫停
+
+/etc/init.d/timeout stop
+
+
+
+
+
+
