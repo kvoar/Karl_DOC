@@ -85,6 +85,8 @@ ipmitool -H 127.0.0.1 -U admin -P admin  raw 0x0c 0x01 0x01 0xc2 0x00
 set MAC addrc OEM
 ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0x0A0 0x00 0xD0 0x50 0x99 0xF6 0x41 0xFD
 
+Get MAC addrc OEM
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0x0A1 0x00 
 set MAC addr
 ipmitool -H 127.0.0.1 -U admin -P admin raw 0x0c 0x01 0x01 0xc2 0x00   (set MAC 一定要)
 
@@ -187,8 +189,46 @@ wd_tm 3 0
 
 /etc/init.d/timeout stop
 
+//----------------------------------------------
+//PSU
+//----------------------------------------------
+addr 0xb0>>1 0x58
+addr 0xb2>>1 0x59
+i2c-test -b 7 -s 0x58 -m 1 -rc 2 -d 0x79
+
+//SET_CHASSIS_ID 1U4LW-C252
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0xAA  0x31 0x55 0x34 0x4C 0x57 0x2D 0x43 0x32 0x35 0x32
 
 
 
+speaker
+ipmitool -H 127.0.0.1 -U admin -P 123456789 raw 0x3a 0xb4 0x00 0x00
+
+Problem - N/A	Remark
+Ryan3_Wang (2021/8/25 17:32)
+*** Problem Description ***
+1. Execute the command to get dev fw info
+ipmitool -I lanplus -H $IP -U $username -P $password raw 0x3a 0xa5
+2. Check response display "Unable to send RAW command (channel=0x0 netfn=0x3a lun=0x0 cmd=0xa5 rsp=0xc1): Invalid command"
 
 
+ipmitool -H 127.0.0.1 -U admin -P amdin sel elist
+
+//watchdog
+
+ipmitool  -H 127.0.0.1 -U admin -P admin mc watchdog get
+
+ipmitool  -H 127.0.0.1 -U admin -P admin raw 0x06 0x24 0x02 0x20 0x00  0x00 0xC8 0x0B
+
+//發NMI
+ipmitool  -H 127.0.0.1 -U admin -P admin power diag
+
+devmem 0x1e6e2000 32 0x1688a8a8 
+
+//BPB
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0x14 0x00
+
+Change CMD 0x3a 0x86 / 0x3a 0x87 for Cypress version
+
+get
+ipmitool -H 127.0.0.1 -U admin -P admin raw  0x3a 0x87 0x0E
