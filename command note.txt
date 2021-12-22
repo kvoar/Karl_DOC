@@ -83,7 +83,7 @@ ipmitool  -H 127.0.0.1 -U admin -P admin lan print 1
 ipmitool -H 127.0.0.1 -U admin -P admin  raw 0x0c 0x01 0x01 0xc2 0x00
 
 set MAC addrc OEM
-ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0x0A0 0x00 0xD0 0x50 0x99 0xF6 0x41 0xFD
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0x0A0 0x00 0xD0 0x50 0x99 0xE4 0x79 0x66
 
 Get MAC addrc OEM
 ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0x0A1 0x00 
@@ -219,11 +219,24 @@ ipmitool -H 127.0.0.1 -U admin -P amdin sel elist
 ipmitool  -H 127.0.0.1 -U admin -P admin mc watchdog get
 
 ipmitool  -H 127.0.0.1 -U admin -P admin raw 0x06 0x24 0x02 0x20 0x00  0x00 0xC8 0x0B
+//start count
+ipmitool  -H 127.0.0.1 -U admin -P admin mc watchdog reset
 
 //發NMI
 ipmitool  -H 127.0.0.1 -U admin -P admin power diag
 
 devmem 0x1e6e2000 32 0x1688a8a8 
+
+devmem 0x1e789000 32 0x1789000
+devmem 0x1e789090
+devmem 0x1e6ee000 32 0xFF00329F
+
+devmem 0x1e789100 32 0x4000
+
+devmem 0x1e789094
+
+devmem 0x1e6e2070
+
 
 //BPB
 ipmitool -H 127.0.0.1 -U admin -P admin raw 0x3A 0x14 0x00
@@ -232,3 +245,13 @@ Change CMD 0x3a 0x86 / 0x3a 0x87 for Cypress version
 
 get
 ipmitool -H 127.0.0.1 -U admin -P admin raw  0x3a 0x87 0x0E
+
+// 看power 狀態
+
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x06 0x07
+
+//check ME recovery mode
+ipmitool -H 127.0.0.1 -U admin -P admin raw 0x30 0xF8
+
+
+
